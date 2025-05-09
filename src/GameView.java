@@ -281,7 +281,8 @@ public class GameView {
 
                     // Player progress
                     row++;
-                    printString(0, row++,  "Winning Progress: " + controller.getGameState().getWinCondition().getPlayerProgress(controller.getGameState().getCurrentPlayer()));
+                    Player player = state.getCurrentPlayer();
+                    printString(0, row++,  player.getName() + "'s Progress: " + controller.getGameState().getWinCondition().getPlayerProgress(player));
 
                     screen.setCursorPosition(new TerminalPosition(cursorPosition + 2, 4));
                     break;
