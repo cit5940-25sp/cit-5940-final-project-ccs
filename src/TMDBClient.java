@@ -38,7 +38,6 @@ public class TMDBClient {
             JsonNode root = mapper.readTree(response.body());
             JsonNode results = root.path("results");
 
-            System.out.println(results.toString());
 
             if (results.isArray() && results.size() > 0) {
                 long id = results.get(0).get("id").asLong();

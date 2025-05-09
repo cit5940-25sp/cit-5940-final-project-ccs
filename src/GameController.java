@@ -7,7 +7,6 @@ import java.util.List;
  */
 public class GameController {
     private GameState gameState;
-    private GameView view;
     private MovieDatabase movieDb;
 
     /**
@@ -17,20 +16,17 @@ public class GameController {
      */
     public GameController(String apiKey) {
         this.movieDb = new MovieDatabase(apiKey);
-        this.view = new GameView();
+
     }
 
-    GameController(MovieDatabase db, GameView view) {
+    GameController(MovieDatabase db) {
         this.movieDb = db;
-        this.view = view;
     }
 
     GameState getGameState() {
         return gameState;
     }
-    GameView getView() {
-        return view;
-    }
+
     public MovieDatabase getMovieDatabase() {
         return movieDb;
     }
@@ -55,7 +51,7 @@ public class GameController {
         
         // Make sure we have a valid starting movie
         if (startingMovie == null) {
-            view.displayInfo("Could not find a starting movie. Please check your database connection.");
+            System.out.println("Could not find a starting movie. Please check your database connection.");
             return null;
         }
         
@@ -97,7 +93,7 @@ public class GameController {
                     "Oops, no valid connection found between " + lastMovie.getTitle() + " and " + guessedMovie.getTitle());
         }
 
-        List<Connection> validConnections = gameState.filterConnection(connections);
+        List<Connection> validConnections = gameState.filterConnections(connections);
 
         if (validConnections.isEmpty()) { // there are connections but the connecting people have been used more than 3 times
             String connectionStr = "";
@@ -108,7 +104,7 @@ public class GameController {
                     "Nice Try! However " + connectionStr + " has already been used 3 times.");
         }
 
-        // ✅ Valid move
+        // Valid move
 
         guessedMovie.addConnectionHistory(validConnections);
         gameState.addMovieToHistory(guessedMovie);
@@ -133,12 +129,9 @@ public class GameController {
 
     public List<String> getAutocompleteSuggestions(String input) {
         List<String> results = new ArrayList<>();
-        for (String title : movieDb.getAllTitles()) {
-            if (title.toLowerCase().startsWith(input.toLowerCase())) {
-                results.add(title);
-            }
+        for (Term title : movieDb.getAutocompleteEngine().suggest(input)) {
+            results.add(title.getTerm());
         }
-        return results.stream().limit(5).toList();
+        return results;
     }
-
 }

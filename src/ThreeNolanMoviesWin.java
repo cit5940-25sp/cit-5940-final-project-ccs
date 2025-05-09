@@ -43,7 +43,11 @@ public class ThreeNolanMoviesWin implements WinCondition {
 
     @Override
     public void updatePlayerProgress(Player player, Movie movie) {
-        if (movie.getGenres().contains(TARGET_DIRECTOR)) {
+//        if (movie.getGenres().contains(TARGET_DIRECTOR)) {
+//            player.updateProgress();
+//        }
+        if (movie.getDirectors().contains(TARGET_DIRECTOR)) {
+            //System.out.println("Nolan movie found: " + movie.getTitle());
             player.updateProgress();
         }
     }

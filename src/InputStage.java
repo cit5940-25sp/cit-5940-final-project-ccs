@@ -1,0 +1,6 @@
+enum InputStage {
+    PLAYER1_NAME,
+    PLAYER2_NAME,
+    WIN_CONDITION_SELECTION,
+    IN_GAME
+}

@@ -17,6 +17,7 @@ public interface WinCondition {
      */
     String description();
 
+
     void updatePlayerProgress(Player player, Movie movie);
 
     String getPlayerProgress(Player player);

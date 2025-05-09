@@ -10,9 +10,11 @@ public class MovieDatabase {
     private final Map<String, Movie> movieCache = new HashMap<>();
     private final Map<String, List<Movie>> actorCache = new HashMap<>();
     private final Map<Long, List<Movie>> similarCache = new HashMap<>();
+    private final Autocomplete autocompleteEngine = new Autocomplete();
 
     public MovieDatabase(String apiKey) {
         this.tmdb = new TMDBClient();
+        autocompleteEngine.setSuggestionLimit(5);
     }
 
     public Movie findByTitle(String title) {
@@ -28,53 +30,7 @@ public class MovieDatabase {
         return movie;
     }
 
-    public List<Movie> findConnections(Movie movie) {
-        if (similarCache.containsKey(movie.getMovieId())) {
-            return similarCache.get(movie.getMovieId());
-        }
-
-        List<Movie> similar = tmdb.fetchSimilarMovies(movie);
-        if (similar != null) {
-            similarCache.put(movie.getMovieId(), similar);
-        }
-
-        return similar;
-    }
-
-
-    public List<Movie> findByActor(String actor) {
-        if (actorCache.containsKey(actor)) {
-            return actorCache.get(actor);
-        }
-
-        List<Movie> movies = tmdb.fetchMoviesByActor(actor);
-        if (movies != null) {
-            actorCache.put(actor, movies);
-        }
-
-        return movies;
-    }
-
-
-    public void clearCache() {
-        movieCache.clear();
-        actorCache.clear();
-        similarCache.clear();
-    }
-
-    public Set<String> getAllTitles() {
-        return movieCache.keySet();
-    }
-
-    public List<String> getMatchingTitles(String prefix) {
-        String lower = prefix.toLowerCase();
-        return movieCache.keySet().stream()
-            .filter(title -> title.toLowerCase().startsWith(lower))
-            .limit(5)
-            .toList();
-    }
-
-    public String preloadPopularMovies() {
+    public void preloadPopularMovies() {
         File cacheFile = new File("movie_cache.json");
         ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 
@@ -85,18 +41,20 @@ public class MovieDatabase {
             try {
                 Movie[] cached = mapper.readValue(cacheFile, Movie[].class);
                 popular = Arrays.asList(cached);
+                populateAutocompleteEngine(autocompleteEngine, popular);
                 for (Movie movie : popular) {
                     movieCache.put(movie.getTitle(), movie);
                 }
-                return "Loaded " + popular.size() + " movies from local cache.";
+                System.out.println("Loaded " + popular.size() + " movies from local cache.");
             } catch (IOException e) {
                 e.printStackTrace();
-                return "Failed to load cache file. " + e.getMessage();
+                System.out.println("Failed to load cache file. " + e.getMessage());
             }
         } else {
             // Fetch from TMDB and write to cache
             int maxPages = 25;
             popular = tmdb.fetchPopularMovies(maxPages);
+            populateAutocompleteEngine(autocompleteEngine, popular);
             for (Movie movie : popular) {
                 movieCache.put(movie.getTitle(), movie);
             }
@@ -105,11 +63,22 @@ public class MovieDatabase {
                 mapper.writeValue(cacheFile, popular);
             } catch (IOException e) {
                 e.printStackTrace();
-                return "Fetched movies, but failed to write cache. " + e.getMessage();
+                System.out.println("Fetched movies, but failed to write cache. " + e.getMessage());
             }
 
-            return "Fetched and cached " + popular.size() + " movies.";
+            System.out.println("Fetched and cached " + popular.size() + " movies.");
         }
+    }
+
+    private void populateAutocompleteEngine(Autocomplete autocompleteEngine, List<Movie> movies) {
+        for (Movie movie : movies) {
+            autocompleteEngine.insert(movie.getTitle(), 0);
+        }
+        System.out.println("Populated autocomplete engine with " + movies.size() + " movies.");
+    }
+
+    public Autocomplete getAutocompleteEngine() {
+        return autocompleteEngine;
     }
 
     public Movie getRandomMovie() {

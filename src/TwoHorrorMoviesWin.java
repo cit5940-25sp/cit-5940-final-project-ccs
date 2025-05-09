@@ -4,7 +4,7 @@
 public class TwoHorrorMoviesWin implements WinCondition {
 
     private static final String TARGET_GENRE = "Horror";
-    private static final int REQUIRED_COUNT = 5;
+    private static final int REQUIRED_COUNT = 2;
 
     /**
      * Checks if the player has guessed at least five movies of the horror genre.
@@ -24,12 +24,13 @@ public class TwoHorrorMoviesWin implements WinCondition {
      */
     @Override
     public String description() {
-        return "Win by guessing five horror movies!";
+        return "Win by guessing two horror movies!";
     }
 
     @Override
     public void updatePlayerProgress(Player player, Movie movie) {
         if (movie.getGenres().contains(TARGET_GENRE)) {
+            // System.out.println("Horror movie found: " + movie.getTitle());
             player.updateProgress();
         }
     }

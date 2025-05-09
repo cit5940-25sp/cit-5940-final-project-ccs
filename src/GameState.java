@@ -14,7 +14,6 @@ public class GameState {
     private final List<Movie> history;
     private final Set<Movie> usedMovies;
     private final Map<String, Integer> connectionUsage;
-    private CountdownTimer timer;// personName → usage count
 
     public GameState(Player player1, Player player2,
                      WinCondition winCondition, Movie startingMovie) {
@@ -27,7 +26,6 @@ public class GameState {
         this.history = new ArrayList<>();
         this.usedMovies = new HashSet<>();
         this.connectionUsage = new HashMap<>();
-        this.timer = new CountdownTimer(30);
 
         addMovieToHistory(startingMovie); // First movie played
         currentPlayer.addGuessedMovie(startingMovie);
@@ -88,7 +86,7 @@ public class GameState {
      * @param connections the list of connections
      * @return true if usage count < 3, false otherwise
      */
-    public List<Connection> filterConnection(List<Connection> connections) {
+    public List<Connection> filterConnections(List<Connection> connections) {
         List<Connection> canUse = new ArrayList<>();
 
         for (Connection con: connections) {
@@ -164,8 +162,5 @@ public class GameState {
         return winCondition;
     }
 
-    public CountdownTimer getTimer() {
-        return timer;
-    }
 
 }

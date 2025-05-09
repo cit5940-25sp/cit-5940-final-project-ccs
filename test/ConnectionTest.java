@@ -12,6 +12,14 @@ public class ConnectionTest {
         assertEquals("Leonardo DiCaprio", connection.getPersonName());
         assertEquals(ConnectionType.ACTOR, connection.getType());
     }
+    @Test
+    public void testEqualsAndHashCode_SameObject() {
+        Connection connection = new Connection("Leonardo DiCaprio", ConnectionType.ACTOR);
+
+        // Same object reference
+        assertEquals(connection, connection);
+        assertEquals(connection.hashCode(), connection.hashCode());
+    }
 
     @Test
     public void testDifferentConnectionsNotEqual() {
@@ -59,5 +67,12 @@ public class ConnectionTest {
         set2.add(c2);
 
         assertEquals(set1, set2);
+    }
+    @Test
+    public void testToString() {
+        Connection c1 = new Connection("Leonardo DiCaprio", ConnectionType.ACTOR);
+        String expected = "Leonardo DiCaprio (ACTOR)";
+
+        assertEquals(expected, c1.toString());
     }
 }
