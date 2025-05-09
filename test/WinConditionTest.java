@@ -2,7 +2,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashSet;
 import java.util.Set;
 
 public class WinConditionTest {
@@ -119,14 +118,14 @@ public class WinConditionTest {
     }
 
     /**
-     * Tests for ThreeNolanMoviesWin
+     * Tests for TwoNolanMoviesWin
      */
     @Test
     public void testThreeNolanMoviesWin_NotEnoughMovies() {
         player.addGuessedMovie(makeNolanMovie(1));
         player.addGuessedMovie(makeNonHorrorMovie(2));
 
-        ThreeNolanMoviesWin winCondition = new ThreeNolanMoviesWin();
+        TwoNolanMoviesWin winCondition = new TwoNolanMoviesWin();
         assertFalse("Should not win with less than 3 Nolan movies.", winCondition.checkVictory(player));
     }
 
@@ -136,7 +135,7 @@ public class WinConditionTest {
         player.addGuessedMovie(makeNolanMovie(2));
         player.addGuessedMovie(makeNolanMovie(3));
 
-        ThreeNolanMoviesWin winCondition = new ThreeNolanMoviesWin();
+        TwoNolanMoviesWin winCondition = new TwoNolanMoviesWin();
         assertTrue("Should win after guessing exactly 3 Nolan movies.", winCondition.checkVictory(player));
     }
 
@@ -147,19 +146,19 @@ public class WinConditionTest {
         player.addGuessedMovie(makeNolanMovie(3));
         player.addGuessedMovie(makeNolanMovie(4));
 
-        ThreeNolanMoviesWin winCondition = new ThreeNolanMoviesWin();
+        TwoNolanMoviesWin winCondition = new TwoNolanMoviesWin();
         assertTrue("Should win even if more than 3 Nolan movies are guessed.", winCondition.checkVictory(player));
     }
 
     @Test
     public void testThreeNolanMoviesWin_Description() {
-        ThreeNolanMoviesWin winCondition = new ThreeNolanMoviesWin();
+        TwoNolanMoviesWin winCondition = new TwoNolanMoviesWin();
         assertEquals("Win by guessing three movies directed by Christopher Nolan!", winCondition.description());
     }
 
     @Test
     public void testThreeNolanMoviesWin_Progress() {
-        ThreeNolanMoviesWin winCondition = new ThreeNolanMoviesWin();
+        TwoNolanMoviesWin winCondition = new TwoNolanMoviesWin();
         player.addGuessedMovie(makeNolanMovie(1));
         winCondition.updatePlayerProgress(player, makeNolanMovie(1));
         assertEquals("1/3", winCondition.getPlayerProgress(player));

@@ -1,13 +1,11 @@
-import java.util.Set;
-
 /**
  * A win condition where the player wins after guessing three movies
  * directed by Christopher Nolan.
  */
-public class ThreeNolanMoviesWin implements WinCondition {
+public class TwoNolanMoviesWin implements WinCondition {
 
     private static final String TARGET_DIRECTOR = "Christopher Nolan";
-    private static final int REQUIRED_COUNT = 3;
+    private static final int REQUIRED_COUNT = 2;
 
     /**
      * Checks if the player has guessed at least three movies directed by Christopher Nolan.
@@ -17,18 +15,7 @@ public class ThreeNolanMoviesWin implements WinCondition {
      */
     @Override
     public boolean checkVictory(Player player) {
-        int nolanCount = 0;
-        Set<Movie> guessedMovies = player.getMoviesGuessed(); // Assumes getter exists
-
-        for (Movie movie : guessedMovies) {
-            if (movie.getDirectors().contains(TARGET_DIRECTOR)) {
-                nolanCount++;
-            }
-            if (nolanCount >= REQUIRED_COUNT) {
-                return true;
-            }
-        }
-        return false;
+        return player.getProgress() >= REQUIRED_COUNT;
     }
 
     /**

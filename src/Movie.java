@@ -146,14 +146,15 @@ public class Movie {
         if (actors.isEmpty()) {
             actors = "no actors fetched";
         }
-        String genres = "";
-        for (String genre: getGenres()) {
-            genres += genre + " ";
+        String directors = "";
+        for (String director: getDirectors()) {
+            directors += director + " ";
         }
-        if (genres.isEmpty()) {
-            genres = "no genre fetched";
+        if (directors.isEmpty()) {
+            directors = "no director fetched";
         }
-        return getTitle() + " (" + getYear() + ") " +  "\nactors:" + actors + "\ngenres:" + genres;
+
+        return getTitle() + " (" + getYear() + ") " +  "\nactors:" + actors + "\ndirectors:" + directors;
     }
 
     @Override

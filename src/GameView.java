@@ -18,7 +18,7 @@ public class GameView {
     private String player2Name = "";
     private List<WinCondition> winConditions = Arrays.asList(
             new TwoHorrorMoviesWin(),
-            new ThreeNolanMoviesWin()
+            new TwoNolanMoviesWin()
     );
 
     private GameController controller;
@@ -176,7 +176,6 @@ public class GameView {
                     return true;
                 }
 
-                // ✅ Mark that we're processing a turn
                 turnInProgress = true;
 
                 TurnResult result = controller.processTurn(input);
@@ -186,6 +185,10 @@ public class GameView {
 
                 if (!result.isSuccess()) {
                     return true;
+                }
+
+                if (result.isGameOver()) {
+                    return false;
                 }
 
                 currentInput.setLength(0);
