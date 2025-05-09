@@ -120,7 +120,7 @@ public class GameController {
                 validConnStr;
 
         if (gameState.hasCurrentPlayerWon()) {
-            return new TurnResult(true, true,"Congrats! " + currentPlayer.getName() + " has won the game with condition " + gameState.getWinCondition());
+            return new TurnResult(true, true,"Congrats! " + currentPlayer.getName());
         }
 
         gameState.switchPlayer();
