@@ -96,8 +96,6 @@ public class GameState {
                 connectionUsage.put(con.getPersonName(), count + 1);
             }
         }
-        System.out.println(connectionUsage.toString());
-        System.out.println(canUse);
         return canUse;
     }
 

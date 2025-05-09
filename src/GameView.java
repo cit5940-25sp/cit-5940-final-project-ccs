@@ -11,8 +11,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 public class GameView {
-    private final int TIME_LIMIT = 60;
-
+    private final int TIMELIMIT = 60;
     private InputStage stage = InputStage.PLAYER1_NAME;
     private String player1Name = "";
     private String player2Name = "";
@@ -30,7 +29,7 @@ public class GameView {
     private int cursorPosition = 0;
 
     // Timer variables
-    private int secondsRemaining = TIME_LIMIT;
+    private int secondsRemaining = TIMELIMIT;
     private boolean timerRunning = true;
     private volatile boolean turnInProgress = false;
     private ScheduledExecutorService scheduler;
@@ -45,7 +44,9 @@ public class GameView {
         scheduler = Executors.newScheduledThreadPool(1);
         scheduler.scheduleAtFixedRate(() -> {
             if (stage == InputStage.IN_GAME && timerRunning && secondsRemaining > 0) {
-                if (turnInProgress) return;  // Wait until turn is done
+                if (turnInProgress) {
+                    return;  // Wait until turn is done
+                }
 
                 secondsRemaining--;
                 try {
@@ -57,7 +58,8 @@ public class GameView {
                 if (secondsRemaining == 0) {
                     timerRunning = false;
                     try {
-                        printInfo("⏰ Time's up! " + controller.getGameState().getOtherPlayer().getName() + " wins!");
+                        printInfo("⏰ Time's up! " + controller.getGameState().
+                                getOtherPlayer().getName() + " wins!");
                         screen.close();
                         terminal.close();
                         System.exit(0);
@@ -95,13 +97,20 @@ public class GameView {
                         running = false;
                         break;
                     case ArrowDown:
-                        if (!suggestions.isEmpty())
-                            selectedSuggestionIndex = (selectedSuggestionIndex + 1) % suggestions.size();
+                        if (!suggestions.isEmpty()) {
+                            selectedSuggestionIndex = (selectedSuggestionIndex + 1) %
+                                    suggestions.size();
+                        }
                         break;
                     case ArrowUp:
-                        if (!suggestions.isEmpty())
-                            selectedSuggestionIndex = (selectedSuggestionIndex - 1 + suggestions.size()) % suggestions.size();
+                        if (!suggestions.isEmpty()) {
+                            selectedSuggestionIndex = (selectedSuggestionIndex - 1 +
+                                    suggestions.size()) % suggestions.size();
+                        }
                         break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: "
+                                + keyStroke.getKeyType());
                 }
                 updateSuggestions();
                 updateScreen();
@@ -150,9 +159,8 @@ public class GameView {
                     int winConditionIndex = Integer.parseInt(input);
                     if (winConditionIndex >= 1 && winConditionIndex <= winConditions.size()) {
                         WinCondition selected = winConditions.get(winConditionIndex - 1);
-                        System.out.println("Selected win condition: " + selected.description());
                         controller.startGame(player1Name, player2Name, selected);
-                        secondsRemaining = TIME_LIMIT;
+                        secondsRemaining = TIMELIMIT;
                         stage = InputStage.IN_GAME;
                     } else {
                         printInfo("Please enter a number from 1 to " + winConditions.size());
@@ -165,7 +173,9 @@ public class GameView {
                 break;
 
             case IN_GAME:
-                if (input.equalsIgnoreCase("exit")) return false;
+                if (input.equalsIgnoreCase("exit")) {
+                    return false;
+                }
 
                 // 🎯 Handle suggestion selection
                 if (selectedSuggestionIndex >= 0) {
@@ -194,12 +204,14 @@ public class GameView {
 
                 currentInput.setLength(0);
                 cursorPosition = 0;
-                secondsRemaining = TIME_LIMIT;
+                secondsRemaining = TIMELIMIT;
                 resumeTimer();
                 return true;
+            default:
+                throw new IllegalStateException("Unexpected value: " + stage);
         }
 
-            return true;
+        return true;
     }
 
     private void updateSuggestions() {
@@ -238,7 +250,8 @@ public class GameView {
                         printString(2, 4 + i, (i + 1) + ". " + winConditions.get(i).description());
                     }
                     printString(0, 4 + winConditions.size() + 1, "> " + currentInput.toString());
-                    screen.setCursorPosition(new TerminalPosition(cursorPosition + 2, 4 + winConditions.size() + 1));
+                    screen.setCursorPosition(new TerminalPosition(cursorPosition + 2,
+                            4 + winConditions.size() + 1));
                     break;
 
                 case IN_GAME:
@@ -249,7 +262,9 @@ public class GameView {
                     printString(0, 1, "Round: " + state.getCurrRound());
                     String timerText = "Time: " + secondsRemaining + "s";
                     printString(size.getColumns() - timerText.length(), 0, timerText);
-                    printString(0, 2, "Last movie: " + state.getRecentHistory().getLast().getTitle() + " (" + state.getRecentHistory().get(0).getYear() + ")" );
+                    printString(0, 2, "Last movie: " +
+                            state.getRecentHistory().getLast().getTitle() +
+                            " (" + state.getRecentHistory().get(0).getYear() + ")");
 
                     // Prompt
                     printString(0, 4, "> " + currentInput.toString());
@@ -259,7 +274,8 @@ public class GameView {
                     for (int i = 0; i < suggestions.size(); i++) {
                         String s = suggestions.get(i);
                         if (i == selectedSuggestionIndex) {
-                            printStringColored(2, row++, "> " + s, TextColor.ANSI.BLACK, TextColor.ANSI.CYAN); // highlighted
+                            printStringColored(2, row++, "> " + s,
+                                    TextColor.ANSI.BLACK, TextColor.ANSI.CYAN); // highlighted
                         } else {
                             printString(2, row++, "- " + s); // normal
                         }
@@ -276,17 +292,21 @@ public class GameView {
                             if (!m.getConnectionHistory().isEmpty()) {
                                 lastConnection = m.getConnectionHistory().getLast().toString();
                             }
-                            printString(2, row++, m.getTitle() + " (" + m.getYear() + ")" + " last connected via: " + lastConnection);
+                            printString(2, row++, m.getTitle() + " (" +
+                                    m.getYear() + ")" + " last connected via: " + lastConnection);
                         }
                     }
 
                     // Player progress
                     row++;
                     Player player = state.getCurrentPlayer();
-                    printString(0, row++,  player.getName() + "'s Progress: " + controller.getGameState().getWinCondition().getPlayerProgress(player));
+                    printString(0, row++,  player.getName() + "'s Progress: " +
+                            controller.getGameState().getWinCondition().getPlayerProgress(player));
 
                     screen.setCursorPosition(new TerminalPosition(cursorPosition + 2, 4));
                     break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + stage);
             }
 
             screen.refresh();
@@ -319,7 +339,9 @@ public class GameView {
             long start = System.currentTimeMillis();
             while (System.currentTimeMillis() - start < 3000) {
                 KeyStroke key = terminal.pollInput();  // consume input
-                if (key != null && key.getKeyType() == KeyType.EOF) break;
+                if (key != null && key.getKeyType() == KeyType.EOF) {
+                    break;
+                }
                 Thread.sleep(50);
             }
 

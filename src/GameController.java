@@ -42,7 +42,7 @@ public class GameController {
      * @param p2   name of Player 2
      * @param cond the win condition strategy
      */
-    public Movie startGame(String p1, String p2, WinCondition cond){
+    public Movie startGame(String p1, String p2, WinCondition cond) {
         // Create players
         Player player1 = new Player(p1);
         Player player2 = new Player(p2);
@@ -51,7 +51,6 @@ public class GameController {
         
         // Make sure we have a valid starting movie
         if (startingMovie == null) {
-            System.out.println("Could not find a starting movie. Please check your database connection.");
             return null;
         }
         
@@ -79,8 +78,6 @@ public class GameController {
             return new TurnResult(false, "Oops, " + movieTitle + " is not found in the database.");
         }
 
-        System.out.println("Guessed: " + guessedMovie);
-
         if (gameState.isMovieUsed(guessedMovie)) {
             return new TurnResult(false, "Nice try! However movie " + movieTitle + " already used");
         }
@@ -90,12 +87,13 @@ public class GameController {
 
         if (connections.isEmpty()) {
             return new TurnResult(false,
-                    "Oops, no valid connection found between " + lastMovie.getTitle() + " and " + guessedMovie.getTitle());
+                    "Oops, no valid connection found between " + lastMovie.getTitle() + " and " +
+                            guessedMovie.getTitle());
         }
 
         List<Connection> validConnections = gameState.filterConnections(connections);
 
-        if (validConnections.isEmpty()) { // there are connections but the connecting people have been used more than 3 times
+        if (validConnections.isEmpty()) {
             String connectionStr = "";
             for (Connection con: connections) {
                 connectionStr += (con.getPersonName() + " ");
@@ -116,7 +114,8 @@ public class GameController {
             validConnStr += (con.getPersonName() + " (" + con.getType() + ") ");
         }
 
-        String msg = "Nice! " + lastMovie.getTitle() + " and " + guessedMovie.getTitle() + " connected via " +
+        String msg = "Nice! " + lastMovie.getTitle() + " and " + guessedMovie.getTitle()
+                + " connected via " +
                 validConnStr;
 
         if (gameState.hasCurrentPlayerWon()) {
