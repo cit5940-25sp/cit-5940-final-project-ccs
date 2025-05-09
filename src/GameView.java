@@ -281,12 +281,16 @@ public class GameView {
                         }
                     }
 
+                    int maxWidth = size.getColumns() - 4;          // Leave some margin for indentation
+
                     // Recent history
                     row++;
                     printString(0, row++, "Recent History (most recent first):");
                     for (Movie m : state.getRecentHistory().reversed()) {
+                        String base = m.getTitle() + " (" + m.getYear() + ")";
+
                         if (m.equals(controller.getGameState().getStartingMovie())) {
-                            printString(2, row++, m.getTitle() + " (" + m.getYear() + ")");
+                            printString(2, row++, base);
                         } else {
                             String lastConnectionStr = "";
                             if (!m.getConnectionHistory().isEmpty()) {
@@ -295,8 +299,16 @@ public class GameView {
                                     lastConnectionStr += (c.toString() + " ");
                                 }
                             }
-                            printString(2, row++, m.getTitle() + " (" +
-                                    m.getYear() + ")" + " last connected via: " + lastConnectionStr);
+                            String full = base + " | Last connected via: " + lastConnectionStr.trim();
+
+                            // Manually wrap the text if it's too long
+                            while (full.length() > maxWidth) {
+                                int cut = full.lastIndexOf(" ", maxWidth);
+                                if (cut == -1) cut = maxWidth;
+                                printString(2, row++, full.substring(0, cut));
+                                full = full.substring(cut).trim();
+                            }
+                            printString(2, row++, full); // print remaining
                         }
                     }
 
