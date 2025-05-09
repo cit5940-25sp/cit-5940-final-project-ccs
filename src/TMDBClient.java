@@ -14,13 +14,21 @@ public class TMDBClient {
     private final String apiKey;
     private final HttpClient client;
     private final ObjectMapper mapper;
-
+    /**
+     * Constructs a new TMDBClient with API key, HttpClient, and ObjectMapper.
+     * The API key is loaded from the configuration.
+     */
     public TMDBClient() {
         this.apiKey = ConfigLoader.get("tmdb.api.key");
         this.client = HttpClient.newHttpClient();
         this.mapper = new ObjectMapper();
     }
-
+    /**
+     * Fetches a movie by its title from the TMDB API.
+     *
+     * @param title The title of the movie to search for.
+     * @return The Movie object if found; otherwise, returns null.
+     */
     public Movie fetchMovieByTitle(String title) {
         try {
             String encoded = URLEncoder.encode(title, StandardCharsets.UTF_8);
@@ -47,7 +55,12 @@ public class TMDBClient {
         }
         return null;
     }
-
+    /**
+     * Fetches detailed information about a movie by its ID from the TMDB API.
+     *
+     * @param id The TMDB ID of the movie.
+     * @return The Movie object with detailed information, or null if not found.
+     */
     private Movie fetchMovieDetailsById(long id) {
         try {
             String url = BASE_URL + "/movie/" + id +
