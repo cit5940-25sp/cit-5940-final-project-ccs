@@ -30,7 +30,6 @@ public class TwoHorrorMoviesWin implements WinCondition {
     @Override
     public void updatePlayerProgress(Player player, Movie movie) {
         if (movie.getGenres().contains(TARGET_GENRE)) {
-            // System.out.println("Horror movie found: " + movie.getTitle());
             player.updateProgress();
         }
     }

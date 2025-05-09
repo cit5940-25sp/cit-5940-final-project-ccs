@@ -1,3 +1,4 @@
+
 /**
  * A win condition where the player wins after guessing three movies
  * directed by Christopher Nolan.
@@ -8,10 +9,10 @@ public class TwoNolanMoviesWin implements WinCondition {
     private static final int REQUIRED_COUNT = 2;
 
     /**
-     * Checks if the player has guessed at least two movies directed by Christopher Nolan.
+     * Checks if the player has guessed at least three movies directed by Christopher Nolan.
      *
      * @param player the player to evaluate
-     * @return true if the player has guessed two or more Nolan movies; false otherwise
+     * @return true if the player has guessed three or more Nolan movies; false otherwise
      */
     @Override
     public boolean checkVictory(Player player) {
@@ -34,7 +35,6 @@ public class TwoNolanMoviesWin implements WinCondition {
 //            player.updateProgress();
 //        }
         if (movie.getDirectors().contains(TARGET_DIRECTOR)) {
-            //System.out.println("Nolan movie found: " + movie.getTitle());
             player.updateProgress();
         }
     }

@@ -133,6 +133,15 @@ public class GameControllerTest {
         assertEquals("Inception", suggestions.get(0));
     }
 
+    @Test
+    public void testGetGameStateAfterGameStart() {
+        WinCondition dummyWin = new TwoHorrorMoviesWin();
+        controller.startGame("Alice", "Bob", dummyWin);
+        GameState state = controller.getGameState();
+        assertNotNull(state);
+    }
+
+
 
     class FakeMovieDatabase extends MovieDatabase {
         private final Map<String, Movie> movies = new HashMap<>();
