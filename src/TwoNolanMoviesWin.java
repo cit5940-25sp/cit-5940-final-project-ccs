@@ -8,10 +8,10 @@ public class TwoNolanMoviesWin implements WinCondition {
     private static final int REQUIRED_COUNT = 2;
 
     /**
-     * Checks if the player has guessed at least three movies directed by Christopher Nolan.
+     * Checks if the player has guessed at least two movies directed by Christopher Nolan.
      *
      * @param player the player to evaluate
-     * @return true if the player has guessed three or more Nolan movies; false otherwise
+     * @return true if the player has guessed two or more Nolan movies; false otherwise
      */
     @Override
     public boolean checkVictory(Player player) {
@@ -25,7 +25,7 @@ public class TwoNolanMoviesWin implements WinCondition {
      */
     @Override
     public String description() {
-        return "Win by guessing three movies directed by Christopher Nolan!";
+        return "Win by guessing two movies directed by Christopher Nolan!";
     }
 
     @Override
