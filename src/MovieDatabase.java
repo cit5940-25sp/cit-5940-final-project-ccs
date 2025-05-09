@@ -45,10 +45,8 @@ public class MovieDatabase {
                 for (Movie movie : popular) {
                     movieCache.put(movie.getTitle(), movie);
                 }
-                System.out.println("Loaded " + popular.size() + " movies from local cache.");
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("Failed to load cache file. " + e.getMessage());
             }
         } else {
             // Fetch from TMDB and write to cache
@@ -63,10 +61,7 @@ public class MovieDatabase {
                 mapper.writeValue(cacheFile, popular);
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("Fetched movies, but failed to write cache. " + e.getMessage());
             }
-
-            System.out.println("Fetched and cached " + popular.size() + " movies.");
         }
     }
 
@@ -74,7 +69,6 @@ public class MovieDatabase {
         for (Movie movie : movies) {
             autocompleteEngine.insert(movie.getTitle(), 0);
         }
-        System.out.println("Populated autocomplete engine with " + movies.size() + " movies.");
     }
 
     public Autocomplete getAutocompleteEngine() {
@@ -86,7 +80,9 @@ public class MovieDatabase {
             preloadPopularMovies();
         }
 
-        if (movieCache.isEmpty()) return null;
+        if (movieCache.isEmpty()) {
+            return null;
+        }
 
         List<Movie> all = new ArrayList<>(movieCache.values());
         return all.get(new Random().nextInt(all.size()));

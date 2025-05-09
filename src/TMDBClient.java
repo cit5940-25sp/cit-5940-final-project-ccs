@@ -23,7 +23,6 @@ public class TMDBClient {
 
     public Movie fetchMovieByTitle(String title) {
         try {
-            System.out.println("Fetching " + title);
             String encoded = URLEncoder.encode(title, StandardCharsets.UTF_8);
             String url = BASE_URL + "/search/movie?query=" + encoded + "&api_key=" + apiKey;
 
@@ -158,7 +157,8 @@ public class TMDBClient {
             for (int page = 1; page <= maxPages; page++) {
                 String url = BASE_URL + "/movie/popular?api_key=" + apiKey + "&page=" + page;
                 HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).build();
-                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                HttpResponse<String> response = client.send(request,
+                        HttpResponse.BodyHandlers.ofString());
                 JsonNode results = mapper.readTree(response.body()).path("results");
 
                 for (JsonNode node : results) {
@@ -170,7 +170,9 @@ public class TMDBClient {
                 }
 
                 // TMDB only allows up to 500 results (25 pages * 20 movies)
-                if (results.isEmpty()) break;
+                if (results.isEmpty()) {
+                    break;
+                }
             }
         } catch (Exception e) {
             System.err.println("fetchPopularMovies error: " + e.getMessage());

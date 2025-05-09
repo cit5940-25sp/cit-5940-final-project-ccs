@@ -1,4 +1,3 @@
-import java.util.Set;
 
 /**
  * A win condition where the player wins after guessing three movies
@@ -36,7 +35,6 @@ public class TwoNolanMoviesWin implements WinCondition {
 //            player.updateProgress();
 //        }
         if (movie.getDirectors().contains(TARGET_DIRECTOR)) {
-            //System.out.println("Nolan movie found: " + movie.getTitle());
             player.updateProgress();
         }
     }

@@ -158,8 +158,12 @@ public class Movie {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
         Movie other = (Movie) obj;
         return year == other.year &&
                 title != null &&
