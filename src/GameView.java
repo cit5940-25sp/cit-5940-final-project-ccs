@@ -288,12 +288,15 @@ public class GameView {
                         if (m.equals(controller.getGameState().getStartingMovie())) {
                             printString(2, row++, m.getTitle() + " (" + m.getYear() + ")");
                         } else {
-                            String lastConnection = "";
+                            String lastConnectionStr = "";
                             if (!m.getConnectionHistory().isEmpty()) {
-                                lastConnection = m.getConnectionHistory().getLast().toString();
+                                List<Connection> lastConnection = m.getConnectionHistory().getLast();
+                                for (Connection c : lastConnection) {
+                                    lastConnectionStr += (c.toString() + " ");
+                                }
                             }
                             printString(2, row++, m.getTitle() + " (" +
-                                    m.getYear() + ")" + " last connected via: " + lastConnection);
+                                    m.getYear() + ")" + " last connected via: " + lastConnectionStr);
                         }
                     }
 
@@ -328,31 +331,6 @@ public class GameView {
         }
     }
 
-//    private void printInfo(String msg) {
-//        try {
-//            pauseTimer(); // ⏸ pause the timer while showing info
-//
-//            screen.clear();
-//            printString(0, 0, msg);
-//            screen.refresh();
-//
-//            long start = System.currentTimeMillis();
-//            while (System.currentTimeMillis() - start < 3000) {
-//                KeyStroke key = terminal.pollInput();  // consume input
-//                if (key != null && key.getKeyType() == KeyType.EOF) {
-//                    break;
-//                }
-//                Thread.sleep(50);
-//            }
-//
-//            // only resume if game is still in play
-//            if (stage == InputStage.IN_GAME) {
-//                resumeTimer();
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
     private void printInfo(String msg) {
         try {
             pauseTimer(); // ⏸ pause the timer while showing info

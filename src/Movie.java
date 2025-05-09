@@ -14,7 +14,7 @@ public class Movie {
     private Set<String> writers;
     private Set<String> composers;
     private Set<String> cinematographers;
-    private List<Connection> connectionHistory;
+    private List<List<Connection>> connectionHistory;
 
     public Movie() {
         this.genres = new HashSet<>();
@@ -91,7 +91,7 @@ public class Movie {
     }
 
     public void addConnectionHistory(List<Connection> connections) {
-        connectionHistory.addAll(connections);
+        connectionHistory.add(connections);
     }
 
     // ======== Getters ========
@@ -133,7 +133,7 @@ public class Movie {
     }
 
 
-    public List<Connection> getConnectionHistory() {
+    public List<List<Connection>> getConnectionHistory() {
         return connectionHistory;
     }
 
