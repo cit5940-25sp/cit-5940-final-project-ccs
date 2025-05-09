@@ -47,7 +47,7 @@ public class GameController {
         Player player1 = new Player(p1);
         Player player2 = new Player(p2);
 
-        Movie startingMovie = movieDb.findByTitle("Interstellar");// movieDb.getRandomMovie();
+        Movie startingMovie = movieDb.findByTitle("Inception");// movieDb.getRandomMovie();
         
         // Make sure we have a valid starting movie
         if (startingMovie == null) {
