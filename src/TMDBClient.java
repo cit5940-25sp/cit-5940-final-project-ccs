@@ -104,6 +104,14 @@ public class TMDBClient {
         }
         return null;
     }
+    /**
+     * Fetches a list of movies similar to the given movie from the TMDB API.
+     *
+     * @param movie The reference Movie object.
+     * @return A list of similar movies, or an empty list if none are found.
+     */
+
+    // Method implementation
     public List<Movie> fetchSimilarMovies(Movie movie) {
         List<Movie> list = new ArrayList<>();
         try {
@@ -126,6 +134,12 @@ public class TMDBClient {
         }
         return list;
     }
+    /**
+     * Fetches a list of movies featuring the specified actor.
+     *
+     * @param actorName The name of the actor to search for.
+     * @return A list of movies featuring the actor, or an empty list if none are found.
+     */
     public List<Movie> fetchMoviesByActor(String actorName) {
         List<Movie> movies = new ArrayList<>();
         try {
@@ -164,6 +178,13 @@ public class TMDBClient {
         }
         return movies;
     }
+    /**
+     * Fetches a list of popular movies from the TMDB API, with pagination support.
+     *
+     * @param maxPages The maximum number of pages to fetch from the API.
+     * @return A list of popular movies, or an empty list if none are found.
+     */
+
     public List<Movie> fetchPopularMovies(int maxPages) {
         List<Movie> popular = new ArrayList<>();
         try {
