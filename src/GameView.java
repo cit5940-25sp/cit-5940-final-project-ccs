@@ -281,19 +281,34 @@ public class GameView {
                         }
                     }
 
+                    int maxWidth = size.getColumns() - 4;          // Leave some margin for indentation
+
                     // Recent history
                     row++;
                     printString(0, row++, "Recent History (most recent first):");
                     for (Movie m : state.getRecentHistory().reversed()) {
+                        String base = m.getTitle() + " (" + m.getYear() + ")";
+
                         if (m.equals(controller.getGameState().getStartingMovie())) {
-                            printString(2, row++, m.getTitle() + " (" + m.getYear() + ")");
+                            printString(2, row++, base);
                         } else {
-                            String lastConnection = "";
+                            String lastConnectionStr = "";
                             if (!m.getConnectionHistory().isEmpty()) {
-                                lastConnection = m.getConnectionHistory().getLast().toString();
+                                List<Connection> lastConnection = m.getConnectionHistory().getLast();
+                                for (Connection c : lastConnection) {
+                                    lastConnectionStr += (c.toString() + " ");
+                                }
                             }
-                            printString(2, row++, m.getTitle() + " (" +
-                                    m.getYear() + ")" + " last connected via: " + lastConnection);
+                            String full = base + " | Last connected via: " + lastConnectionStr.trim();
+
+                            // Manually wrap the text if it's too long
+                            while (full.length() > maxWidth) {
+                                int cut = full.lastIndexOf(" ", maxWidth);
+                                if (cut == -1) cut = maxWidth;
+                                printString(2, row++, full.substring(0, cut));
+                                full = full.substring(cut).trim();
+                            }
+                            printString(2, row++, full); // print remaining
                         }
                     }
 
@@ -328,31 +343,6 @@ public class GameView {
         }
     }
 
-//    private void printInfo(String msg) {
-//        try {
-//            pauseTimer(); // ⏸ pause the timer while showing info
-//
-//            screen.clear();
-//            printString(0, 0, msg);
-//            screen.refresh();
-//
-//            long start = System.currentTimeMillis();
-//            while (System.currentTimeMillis() - start < 3000) {
-//                KeyStroke key = terminal.pollInput();  // consume input
-//                if (key != null && key.getKeyType() == KeyType.EOF) {
-//                    break;
-//                }
-//                Thread.sleep(50);
-//            }
-//
-//            // only resume if game is still in play
-//            if (stage == InputStage.IN_GAME) {
-//                resumeTimer();
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
     private void printInfo(String msg) {
         try {
             pauseTimer(); // ⏸ pause the timer while showing info

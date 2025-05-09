@@ -14,7 +14,7 @@ public class Movie {
     private Set<String> writers;
     private Set<String> composers;
     private Set<String> cinematographers;
-    private List<Connection> connectionHistory;
+    private List<List<Connection>> connectionHistory;
 
     public Movie() {
         this.genres = new HashSet<>();
@@ -91,7 +91,7 @@ public class Movie {
     }
 
     public void addConnectionHistory(List<Connection> connections) {
-        connectionHistory.addAll(connections);
+        connectionHistory.add(connections);
     }
 
     // ======== Getters ========
@@ -133,7 +133,7 @@ public class Movie {
     }
 
 
-    public List<Connection> getConnectionHistory() {
+    public List<List<Connection>> getConnectionHistory() {
         return connectionHistory;
     }
 
@@ -146,14 +146,15 @@ public class Movie {
         if (actors.isEmpty()) {
             actors = "no actors fetched";
         }
-        String genres = "";
-        for (String genre: getGenres()) {
-            genres += genre + " ";
+        String directors = "";
+        for (String director: getDirectors()) {
+            directors += director + " ";
         }
-        if (genres.isEmpty()) {
-            genres = "no genre fetched";
+        if (directors.isEmpty()) {
+            directors = "no director fetched";
         }
-        return getTitle() + " (" + getYear() + ") " +  "\nactors:" + actors + "\ngenres:" + genres;
+
+        return getTitle() + " (" + getYear() + ") " +  "\nactors:" + actors + "\ndirectors:" + directors;
     }
 
     @Override
