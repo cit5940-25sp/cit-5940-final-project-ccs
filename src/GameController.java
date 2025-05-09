@@ -47,9 +47,8 @@ public class GameController {
         Player player1 = new Player(p1);
         Player player2 = new Player(p2);
 
-//        Movie startingMovie = movieDb.getRandomMovie();
-        Movie startingMovie = movieDb.findByTitle("Inception");
-        
+        Movie startingMovie = movieDb.getRandomMovie();
+
         // Make sure we have a valid starting movie
         if (startingMovie == null) {
             return null;
@@ -112,7 +111,7 @@ public class GameController {
 
         String validConnStr = "";
         for (Connection con: validConnections) {
-            validConnStr += (con.getPersonName() + " (" + con.getType() + ")");
+            validConnStr += (con.getPersonName() + " (" + con.getType() + ") ");
         }
 
         String msg = "Nice! " + lastMovie.getTitle() + " and " + guessedMovie.getTitle()
@@ -120,7 +119,7 @@ public class GameController {
                 validConnStr;
 
         if (gameState.hasCurrentPlayerWon()) {
-            return new TurnResult(true, true,"Congrats! " + currentPlayer.getName() + " won!");
+            return new TurnResult(true, true,"Congrats " + currentPlayer.getName() + ", you won!");
         }
 
         gameState.switchPlayer();
