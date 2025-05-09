@@ -58,7 +58,7 @@ public class GameView {
                 if (secondsRemaining == 0) {
                     timerRunning = false;
                     try {
-                        printInfo("⏰ Time's up! " + controller.getGameState().
+                        printInfo("Time's up! " + controller.getGameState().
                                 getOtherPlayer().getName() + " wins!");
                         screen.close();
                         terminal.close();
@@ -328,14 +328,45 @@ public class GameView {
         }
     }
 
+//    private void printInfo(String msg) {
+//        try {
+//            pauseTimer(); // ⏸ pause the timer while showing info
+//
+//            screen.clear();
+//            printString(0, 0, msg);
+//            screen.refresh();
+//
+//            long start = System.currentTimeMillis();
+//            while (System.currentTimeMillis() - start < 3000) {
+//                KeyStroke key = terminal.pollInput();  // consume input
+//                if (key != null && key.getKeyType() == KeyType.EOF) {
+//                    break;
+//                }
+//                Thread.sleep(50);
+//            }
+//
+//            // only resume if game is still in play
+//            if (stage == InputStage.IN_GAME) {
+//                resumeTimer();
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
     private void printInfo(String msg) {
         try {
             pauseTimer(); // ⏸ pause the timer while showing info
 
             screen.clear();
-            printString(0, 0, msg);
-            screen.refresh();
 
+            int maxWidth = screen.getTerminalSize().getColumns();
+            List<String> lines = wrapText(msg, maxWidth);
+
+            for (int i = 0; i < lines.size(); i++) {
+                printString(0, i, lines.get(i));
+            }
+
+            screen.refresh();
             long start = System.currentTimeMillis();
             while (System.currentTimeMillis() - start < 3000) {
                 KeyStroke key = terminal.pollInput();  // consume input
@@ -345,7 +376,6 @@ public class GameView {
                 Thread.sleep(50);
             }
 
-            // only resume if game is still in play
             if (stage == InputStage.IN_GAME) {
                 resumeTimer();
             }
@@ -353,6 +383,27 @@ public class GameView {
             e.printStackTrace();
         }
     }
+
+    // Utility function to wrap long messages
+    private List<String> wrapText(String text, int maxWidth) {
+        List<String> lines = new ArrayList<>();
+        String[] words = text.split(" ");
+        StringBuilder currentLine = new StringBuilder();
+
+        for (String word : words) {
+            if (currentLine.length() + word.length() + 1 > maxWidth) {
+                lines.add(currentLine.toString());
+                currentLine = new StringBuilder();
+            }
+            if (currentLine.length() > 0) {
+                currentLine.append(" ");
+            }
+            currentLine.append(word);
+        }
+        lines.add(currentLine.toString());
+        return lines;
+    }
+
 
     private void pauseTimer() {
         timerRunning = false;
