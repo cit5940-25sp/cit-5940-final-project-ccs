@@ -125,7 +125,13 @@ public class GameController {
         gameState.switchPlayer();
         return new TurnResult(true, msg);
     }
-
+    /**
+     * Retrieves a list of autocomplete suggestions based on the given input string.
+     * It queries the autocomplete engine from the movie database to find matching titles.
+     *
+     * @param input The partial input string for which to fetch autocomplete suggestions.
+     * @return A list of suggested movie titles that match the input string.
+     */
     public List<String> getAutocompleteSuggestions(String input) {
         List<String> results = new ArrayList<>();
         for (Term title : movieDb.getAutocompleteEngine().suggest(input)) {
