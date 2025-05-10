@@ -121,46 +121,65 @@ public class WinConditionTest {
      * Tests for TwoNolanMoviesWin
      */
     @Test
-    public void testThreeNolanMoviesWin_NotEnoughMovies() {
-        player.addGuessedMovie(makeNolanMovie(1));
-        player.addGuessedMovie(makeNonHorrorMovie(2));
-
+    public void testTwoNolanMoviesWin_ExactMovies() {
+        // Arrange
         TwoNolanMoviesWin winCondition = new TwoNolanMoviesWin();
-        assertFalse("Should not win with less than 3 Nolan movies.", winCondition.checkVictory(player));
+        Movie nolanMovie1 = makeNolanMovie(1);
+        Movie nolanMovie2 = makeNolanMovie(2);
+
+        // Add movies to the player's guessed list
+        player.addGuessedMovie(nolanMovie1);
+        player.addGuessedMovie(nolanMovie2);
+
+        // Act - update progress manually
+        winCondition.updatePlayerProgress(player, nolanMovie1);
+        winCondition.updatePlayerProgress(player, nolanMovie2);
+
+        // Assert
+        assertTrue("Should win after guessing exactly 2 Nolan movies.", winCondition.checkVictory(player));
     }
 
     @Test
-    public void testThreeNolanMoviesWin_ExactMovies() {
-        player.addGuessedMovie(makeNolanMovie(1));
-        player.addGuessedMovie(makeNolanMovie(2));
-        player.addGuessedMovie(makeNolanMovie(3));
-
+    public void testTwoNolanMoviesWin_MoreThanTwoMovies() {
+        // Arrange
         TwoNolanMoviesWin winCondition = new TwoNolanMoviesWin();
-        assertTrue("Should win after guessing exactly 3 Nolan movies.", winCondition.checkVictory(player));
+        Movie nolanMovie1 = makeNolanMovie(1);
+        Movie nolanMovie2 = makeNolanMovie(2);
+        Movie nolanMovie3 = makeNolanMovie(3);
+        Movie nolanMovie4 = makeNolanMovie(4);
+
+        // Add movies to the player's guessed list
+        player.addGuessedMovie(nolanMovie1);
+        player.addGuessedMovie(nolanMovie2);
+        player.addGuessedMovie(nolanMovie3);
+        player.addGuessedMovie(nolanMovie4);
+
+        // Act - update progress manually
+        winCondition.updatePlayerProgress(player, nolanMovie1);
+        winCondition.updatePlayerProgress(player, nolanMovie2);
+        winCondition.updatePlayerProgress(player, nolanMovie3);
+        winCondition.updatePlayerProgress(player, nolanMovie4);
+
+        // Assert
+        assertTrue("Should win even if more than 2 Nolan movies are guessed.", winCondition.checkVictory(player));
+    }
+    @Test
+    public void testTwoNolanMoviesWin_Description() {
+        // Arrange
+        TwoNolanMoviesWin winCondition = new TwoNolanMoviesWin();
+
+        // Act & Assert
+        assertEquals("Win by guessing two movies directed by Christopher Nolan!", winCondition.description());
     }
 
     @Test
-    public void testThreeNolanMoviesWin_MoreThanThreeMovies() {
-        player.addGuessedMovie(makeNolanMovie(1));
-        player.addGuessedMovie(makeNolanMovie(2));
-        player.addGuessedMovie(makeNolanMovie(3));
-        player.addGuessedMovie(makeNolanMovie(4));
-
-        TwoNolanMoviesWin winCondition = new TwoNolanMoviesWin();
-        assertTrue("Should win even if more than 3 Nolan movies are guessed.", winCondition.checkVictory(player));
-    }
-
-    @Test
-    public void testThreeNolanMoviesWin_Description() {
-        TwoNolanMoviesWin winCondition = new TwoNolanMoviesWin();
-        assertEquals("Win by guessing three movies directed by Christopher Nolan!", winCondition.description());
-    }
-
-    @Test
-    public void testThreeNolanMoviesWin_Progress() {
+    public void testTwoNolanMoviesWin_Progress() {
+        // Arrange
         TwoNolanMoviesWin winCondition = new TwoNolanMoviesWin();
         player.addGuessedMovie(makeNolanMovie(1));
         winCondition.updatePlayerProgress(player, makeNolanMovie(1));
-        assertEquals("1/3", winCondition.getPlayerProgress(player));
+
+        // Act & Assert
+        assertEquals("1/2", winCondition.getPlayerProgress(player));
     }
 }

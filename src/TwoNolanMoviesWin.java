@@ -28,17 +28,25 @@ public class TwoNolanMoviesWin implements WinCondition {
     public String description() {
         return "Win by guessing two movies directed by Christopher Nolan!";
     }
-
+    /**
+     * Updates the player's progress if the guessed movie is directed by Christopher Nolan.
+     *
+     * @param player The player whose progress is being updated.
+     * @param movie The movie that the player has guessed.
+     */
     @Override
     public void updatePlayerProgress(Player player, Movie movie) {
-//        if (movie.getGenres().contains(TARGET_DIRECTOR)) {
-//            player.updateProgress();
-//        }
+
         if (movie.getDirectors().contains(TARGET_DIRECTOR)) {
             player.updateProgress();
         }
     }
-
+    /**
+     * Retrieves the player's current progress towards guessing two Nolan movies.
+     *
+     * @param player The player whose progress is being queried.
+     * @return A string representing the player's progress in the format "current/required".
+     */
     @Override
     public String getPlayerProgress(Player player) {
         return player.getProgress() + "/" + REQUIRED_COUNT;
