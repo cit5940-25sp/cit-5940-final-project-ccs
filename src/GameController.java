@@ -18,22 +18,44 @@ public class GameController {
         this.movieDb = new MovieDatabase(apiKey);
 
     }
-
+    /**
+     * Constructs a GameController with a given MovieDatabase instance (for testing or custom config).
+     *
+     * @param db The MovieDatabase instance to use.
+     */
     GameController(MovieDatabase db) {
         this.movieDb = db;
     }
 
+    /**
+     * Retrieves the current game state, which includes information about
+     * players, the current turn, movie history, and the win condition.
+     *
+     * @return the current GameState object.
+     */
     GameState getGameState() {
         return gameState;
     }
 
+    /**
+     * Returns the MovieDatabase instance used by the game controller.
+     * This provides access to movie data, search, and autocomplete functionality.
+     *
+     * @return the MovieDatabase associated with this controller.
+     */
     public MovieDatabase getMovieDatabase() {
         return movieDb;
     }
+
+    /**
+     * Sets the game state to the specified GameState object.
+     * Useful for initializing or restoring a game session.
+     *
+     * @param state the GameState to set as the current state.
+     */
     void setGameState(GameState state) {
         this.gameState = state;
     }
-
 
     /**
      * Starts a new game session with the specified players and win condition.

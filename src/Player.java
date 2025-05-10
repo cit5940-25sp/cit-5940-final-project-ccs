@@ -31,11 +31,19 @@ public class Player {
     }
 
     // ======== Getters ========
-
+    /**
+     * Returns the player's name.
+     *
+     * @return the name of the player
+     */
     public String getName() {
         return name;
     }
-
+    /**
+     * Returns an unmodifiable set of all movies guessed by the player.
+     *
+     * @return set of guessed movies
+     */
     public Set<Movie> getMoviesGuessed() {
         return Set.copyOf(moviesGuessed); // creates an unmodifiable Set
     }
@@ -48,11 +56,17 @@ public class Player {
     public int getNumMoviesGuessed() {
         return moviesGuessed.size();
     }
-
+    /**
+     * Returns the current progress count for the player.
+     *
+     * @return the player's progress
+     */
     public int getProgress() {
         return progress;
     }
-
+    /**
+     * Increments the player's progress counter by 1.
+     */
     public void updateProgress() {
         progress++;
     }
