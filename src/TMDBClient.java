@@ -14,13 +14,21 @@ public class TMDBClient {
     private final String apiKey;
     private final HttpClient client;
     private final ObjectMapper mapper;
-
+    /**
+     * Constructs a new TMDBClient with API key, HttpClient, and ObjectMapper.
+     * The API key is loaded from the configuration.
+     */
     public TMDBClient() {
         this.apiKey = ConfigLoader.get("tmdb.api.key");
         this.client = HttpClient.newHttpClient();
         this.mapper = new ObjectMapper();
     }
-
+    /**
+     * Fetches a movie by its title from the TMDB API.
+     *
+     * @param title The title of the movie to search for.
+     * @return The Movie object if found; otherwise, returns null.
+     */
     public Movie fetchMovieByTitle(String title) {
         try {
             String encoded = URLEncoder.encode(title, StandardCharsets.UTF_8);
@@ -47,7 +55,12 @@ public class TMDBClient {
         }
         return null;
     }
-
+    /**
+     * Fetches detailed information about a movie by its ID from the TMDB API.
+     *
+     * @param id The TMDB ID of the movie.
+     * @return The Movie object with detailed information, or null if not found.
+     */
     private Movie fetchMovieDetailsById(long id) {
         try {
             String url = BASE_URL + "/movie/" + id +
@@ -91,6 +104,14 @@ public class TMDBClient {
         }
         return null;
     }
+    /**
+     * Fetches a list of movies similar to the given movie from the TMDB API.
+     *
+     * @param movie The reference Movie object.
+     * @return A list of similar movies, or an empty list if none are found.
+     */
+
+    // Method implementation
     public List<Movie> fetchSimilarMovies(Movie movie) {
         List<Movie> list = new ArrayList<>();
         try {
@@ -113,6 +134,12 @@ public class TMDBClient {
         }
         return list;
     }
+    /**
+     * Fetches a list of movies featuring the specified actor.
+     *
+     * @param actorName The name of the actor to search for.
+     * @return A list of movies featuring the actor, or an empty list if none are found.
+     */
     public List<Movie> fetchMoviesByActor(String actorName) {
         List<Movie> movies = new ArrayList<>();
         try {
@@ -151,6 +178,13 @@ public class TMDBClient {
         }
         return movies;
     }
+    /**
+     * Fetches a list of popular movies from the TMDB API, with pagination support.
+     *
+     * @param maxPages The maximum number of pages to fetch from the API.
+     * @return A list of popular movies, or an empty list if none are found.
+     */
+
     public List<Movie> fetchPopularMovies(int maxPages) {
         List<Movie> popular = new ArrayList<>();
         try {

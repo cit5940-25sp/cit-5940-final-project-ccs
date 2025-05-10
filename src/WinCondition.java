@@ -17,8 +17,19 @@ public interface WinCondition {
      */
     String description();
 
-
+    /**
+     * Updates the player's progress towards meeting the win condition
+     * when a new movie is guessed.
+     *
+     * @param player The player whose progress is being updated.
+     * @param movie The movie that the player has guessed.
+     */
     void updatePlayerProgress(Player player, Movie movie);
-
+    /**
+     * Retrieves the player's current progress towards fulfilling the win condition.
+     *
+     * @param player The player whose progress is being queried.
+     * @return A string representation of the player's progress.
+     */
     String getPlayerProgress(Player player);
 }

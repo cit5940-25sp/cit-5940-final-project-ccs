@@ -34,6 +34,12 @@ public class GameView {
     private volatile boolean turnInProgress = false;
     private ScheduledExecutorService scheduler;
 
+    /**
+     * Constructs a GameView object that handles the game interface, timer, and screen rendering.
+     *
+     * @param controller The GameController instance managing game logic.
+     * @throws IOException If there is an error initializing the screen or terminal.
+     */
     public GameView(GameController controller) throws IOException {
         this.controller = controller;
         this.terminal = new DefaultTerminalFactory().createTerminal();
@@ -70,7 +76,12 @@ public class GameView {
             }
         }, 1, 1, TimeUnit.SECONDS);
     }
-
+    /**
+     * Starts the main game loop, handling player input, screen updates, and game events.
+     *
+     * @throws IOException If there is an issue with screen rendering.
+     * @throws InterruptedException If the game loop is interrupted during execution.
+     */
     public void run() throws IOException, InterruptedException {
         boolean running = true;
 
@@ -123,19 +134,29 @@ public class GameView {
         screen.close();
         terminal.close();
     }
-
+    /**
+     * Handles character input from the player, inserting it into the current input field.
+     *
+     * @param c The character entered by the player.
+     */
     private void handleCharacter(char c) {
         currentInput.insert(cursorPosition, c);
         cursorPosition++;
     }
-
+    /**
+     * Handles backspace input from the player, removing the last character from the current input.
+     */
     private void handleBackspace() {
         if (cursorPosition > 0) {
             currentInput.deleteCharAt(cursorPosition - 1);
             cursorPosition--;
         }
     }
-
+    /**
+     * Handles the Enter key event, processing the current input according to the game stage.
+     *
+     * @return true if the game continues, false if it ends.
+     */
     private boolean handleEnter() {
         String input = currentInput.toString().trim();
 
@@ -177,7 +198,7 @@ public class GameView {
                     return false;
                 }
 
-                // 🎯 Handle suggestion selection
+                // Handle suggestion selection
                 if (selectedSuggestionIndex >= 0) {
                     currentInput.setLength(0);
                     currentInput.append(suggestions.get(selectedSuggestionIndex));
@@ -186,7 +207,7 @@ public class GameView {
                     return true;
                 }
 
-                // ✅ Mark that we're processing a turn
+                // Mark that we're processing a turn
                 turnInProgress = true;
 
                 TurnResult result = controller.processTurn(input);
@@ -213,7 +234,9 @@ public class GameView {
 
         return true;
     }
-
+    /**
+     * Updates the list of autocomplete suggestions based on the current input string.
+     */
     private void updateSuggestions() {
         String prefix = currentInput.toString();
         suggestions.clear();
@@ -221,7 +244,11 @@ public class GameView {
             suggestions = new ArrayList<>(controller.getAutocompleteSuggestions(prefix));
         }
     }
-
+    /**
+     * Updates the game screen display, reflecting the current state and input.
+     *
+     * @throws IOException If there is an issue with screen rendering.
+     */
     private void updateScreen() throws IOException {
         synchronized (screen) {
             screen.clear();
@@ -327,7 +354,13 @@ public class GameView {
             screen.refresh();
         }
     }
-
+    /**
+     * Prints a string to the terminal at the specified coordinates.
+     *
+     * @param column The column position on the screen.
+     * @param row The row position on the screen.
+     * @param text The string text to display.
+     */
     private void printString(int column, int row, String text) {
         for (int i = 0; i < text.length(); i++) {
             screen.setCharacter(column + i, row,
@@ -335,14 +368,26 @@ public class GameView {
                             TextColor.ANSI.WHITE, TextColor.ANSI.BLACK));
         }
     }
-
+    /**
+     * Prints a string with custom foreground and background colors at the specified coordinates.
+     *
+     * @param column The column position on the screen.
+     * @param row The row position on the screen.
+     * @param text The string text to display.
+     * @param fg The foreground color.
+     * @param bg The background color.
+     */
     private void printStringColored(int column, int row, String text, TextColor fg, TextColor bg) {
         for (int i = 0; i < text.length(); i++) {
             screen.setCharacter(column + i, row,
                     new TextCharacter(text.charAt(i), fg, bg));
         }
     }
-
+    /**
+     * Displays an informational message on the screen, pausing the game timer temporarily.
+     *
+     * @param msg The message to display.
+     */
     private void printInfo(String msg) {
         try {
             pauseTimer(); // ⏸ pause the timer while showing info
@@ -373,7 +418,13 @@ public class GameView {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Wraps long lines of text to fit within a specified maximum width.
+     *
+     * @param text The text to wrap.
+     * @param maxWidth The maximum width of each line.
+     * @return A list of strings, each representing a wrapped line.
+     */
     // Utility function to wrap long messages
     private List<String> wrapText(String text, int maxWidth) {
         List<String> lines = new ArrayList<>();
@@ -394,11 +445,15 @@ public class GameView {
         return lines;
     }
 
-
+    /**
+     * Pauses the game timer, freezing the countdown temporarily.
+     */
     private void pauseTimer() {
         timerRunning = false;
     }
-
+    /**
+     * Resumes the game timer, continuing the countdown.
+     */
     private void resumeTimer() {
         timerRunning = true;
     }
