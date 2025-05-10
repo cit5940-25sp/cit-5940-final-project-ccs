@@ -14,8 +14,20 @@ public class Movie {
     private Set<String> writers;
     private Set<String> composers;
     private Set<String> cinematographers;
-    private List<Connection> connectionHistory;
-
+    private List<List<Connection>> connectionHistory;
+    /**
+     * Constructs a Movie with full metadata.
+     *
+     * @param movieId          unique identifier for the movie
+     * @param title            movie title
+     * @param year             release year
+     * @param genres           set of genres
+     * @param actors           set of actors
+     * @param directors        set of directors
+     * @param writers          set of writers
+     * @param composers        set of composers
+     * @param cinematographers set of cinematographers
+     */
     public Movie() {
         this.genres = new HashSet<>();
         this.actors = new HashSet<>();
@@ -90,8 +102,13 @@ public class Movie {
         return connections;
     }
 
+    /**
+     * Adds a new connection path to this movie's connection history.
+     *
+     * @param connections the list of connections used to reach this movie
+     */
     public void addConnectionHistory(List<Connection> connections) {
-        connectionHistory.addAll(connections);
+        connectionHistory.add(connections);
     }
 
     // ======== Getters ========
@@ -132,30 +149,16 @@ public class Movie {
         return cinematographers;
     }
 
-
-    public List<Connection> getConnectionHistory() {
+    public List<List<Connection>> getConnectionHistory() {
         return connectionHistory;
     }
 
-    @Override
-    public String toString() {
-        String actors = "";
-        for (String actor: getActors()) {
-            actors += actor + " ";
-        }
-        if (actors.isEmpty()) {
-            actors = "no actors fetched";
-        }
-        String genres = "";
-        for (String genre: getGenres()) {
-            genres += genre + " ";
-        }
-        if (genres.isEmpty()) {
-            genres = "no genre fetched";
-        }
-        return getTitle() + " (" + getYear() + ") " +  "\nactors:" + actors + "\ngenres:" + genres;
-    }
-
+    /**
+     * Compares this movie to another object based on case-insensitive title and year.
+     *
+     * @param obj the object to compare
+     * @return true if titles (case-insensitive) and years match, false otherwise
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -171,6 +174,11 @@ public class Movie {
                 title.equalsIgnoreCase(other.title);  // case-insensitive match
     }
 
+    /**
+     * Generates a hash code using the lowercased title and year.
+     *
+     * @return hash code for the movie
+     */
     @Override
     public int hashCode() {
         return Objects.hash(title == null ? 0 : title.toLowerCase(), year);
