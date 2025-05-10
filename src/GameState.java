@@ -99,6 +99,11 @@ public class GameState {
         return canUse;
     }
 
+    /**
+     * Returns the starting movie used to begin the game.
+     *
+     * @return the starting Movie object
+     */
     public Movie getStartingMovie() {
         return startingMovie;
     }

@@ -10,8 +10,14 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
 
+/**
+ * Handles the terminal-based user interface for the Movie Game.
+ * Manages player input, screen updates, turn timer, and game progression.
+ */
 public class GameView {
+    /** Maximum allowed time (in seconds) for each player's turn. */
     private final int TIMELIMIT = 60;
+    // Tracks the current input phase of the game (e.g., player name entry, gameplay, etc.)
     private InputStage stage = InputStage.PLAYER1_NAME;
     private String player1Name = "";
     private String player2Name = "";

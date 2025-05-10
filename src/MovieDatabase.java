@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-
+/**
+ * Manages movie data from TMDB and provides caching, lookup, and autocomplete functionality.
+ */
 public class MovieDatabase {
     private final TMDBClient tmdb;
     private final Map<String, Movie> movieCache = new HashMap<>();
