@@ -7,10 +7,10 @@ public class TwoHorrorMoviesWin implements WinCondition {
     private static final int REQUIRED_COUNT = 2;
 
     /**
-     * Checks if the player has guessed at least five movies of the horror genre.
+     * Checks if the player has guessed at least two movies of the horror genre.
      *
      * @param player the player to evaluate
-     * @return true if the player has guessed five or more horror movies; false otherwise
+     * @return true if the player has guessed two or more horror movies; false otherwise
      */
     @Override
     public boolean checkVictory(Player player) {
